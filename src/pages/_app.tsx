@@ -3,7 +3,6 @@ import { createRef } from 'react';
 import { CacheProvider } from '@emotion/react';
 import type { EmotionCache } from '@emotion/react';
 import { IconButton } from '@mui/material';
-import { Analytics } from '@vercel/analytics/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider as NextThemeProvider } from 'next-themes';
@@ -55,7 +54,6 @@ export default function MyApp(props: MyAppProps) {
             )}
           >
             <Component {...pageProps} />
-            <Analytics debug={false} />
           </SnackbarProvider>
         </CacheProvider>
       </NextThemeProvider>
