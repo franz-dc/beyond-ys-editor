@@ -92,7 +92,7 @@ Content editor for [Beyond Ys](https://beyond-ys.vercel.app).
    yarn dev
    ```
 
-7. Open [localhost:9000](http://localhost:9000) on your browser.
+7. Open [localhost:9001](http://localhost:9001) on your browser.
 
 \* _Only canon Ys games are seeded (with some of their characters, music, and staff)._
 
