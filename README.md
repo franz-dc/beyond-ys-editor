@@ -1,31 +1,9 @@
 <!-- markdownlint-disable-next-line -->
 <img width="150" src="/public/assets/logo.png" alt="Beyond Ys logo">
 
-# Beyond Ys
+# Beyond Ys Editor
 
-A fan website dedicated to [Nihon Falcom](https://www.falcom.co.jp)'s works. You can find information about Falcom's games, characters, music, staff, and more!
-
-## Demo
-
-You can visit the demo site [here](https://beyond-ys.vercel.app).
-
-## Features
-
-- **Music player**: Listen to your favorite Falcom music while browsing the site.
-- **Detailed credits**: Know who worked on specific works and music.
-- **Themes**: Choose between light and dark theme (defaults to dark).
-- **Responsive design**: Built with mobile devices in mind.
-
-## Technologies Used
-
-- [Next.js](https://nextjs.org): React framework for server-side rendering, static site generation, and incremental static regeneration.
-- [Firebase](https://firebase.google.com): Comprehensive development platform providing authentication, real-time database, etc.
-- [Material UI (MUI)](https://mui.com): React UI library for building responsive web applications.
-- [Vercel](https://vercel.com): Cloud platform for static sites and serverless functions.
-
-## Content Progress
-
-Check out the project's progress regarding content [here](https://relic-beak-0d6.notion.site/d96cfcbbd068490782337f095535e1ae?v=eb1e2dd604364bd2b1fceaac149f0a8c).
+Content editor for [Beyond Ys](https://beyond-ys.vercel.app).
 
 ## Getting Started
 
