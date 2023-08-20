@@ -10,7 +10,8 @@
     "ts:watch": "yarn ts --watch",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "set-user-role": "ts-node --esm ./scripts/setUserRole.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
