@@ -176,28 +176,20 @@ const BulkAddMusic = () => {
       staffIdsWithChanges = [...new Set(staffIdsWithChanges)];
       albumIdsWithChanges = [...new Set(albumIdsWithChanges)].filter(Boolean);
 
-      // await revalidatePaths(
-      //   [
-      //     ...staffIdsWithChanges.map((id) => `/staff/${id}`),
-      //     ...albumIdsWithChanges.map((id) => `/music/${id}`),
-      //   ],
-      //   tokenRes.token
-      // );
-
-      // ! Above code exceeds the 10s execution time limit on Vercel.
-      // ! Below code isolates all paths to revalidate individually.
-
-      await Promise.all([
-        ...staffIdsWithChanges.map((id) =>
-          revalidatePaths([`/staff/${id}`], tokenRes.token)
-        ),
-        ...albumIdsWithChanges.map((id) =>
-          revalidatePaths([`/music/${id}`], tokenRes.token)
-        ),
-      ]);
+      await revalidatePaths(
+        [
+          ...staffIdsWithChanges.map((id) => `/staff/${id}`),
+          ...albumIdsWithChanges.map((id) => `/music/${id}`),
+        ],
+        tokenRes.token,
+        enqueueSnackbar
+      );
 
       reset();
-      enqueueSnackbar('Music added successfully.', { variant: 'success' });
+      enqueueSnackbar(
+        'Music added successfully. Music IDs are logged in the console.',
+        { variant: 'success' }
+      );
     } catch (err) {
       enqueueSnackbar('Failed to add music.', { variant: 'error' });
       console.error(err);
