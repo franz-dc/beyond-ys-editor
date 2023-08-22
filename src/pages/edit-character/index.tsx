@@ -439,7 +439,7 @@ const EditCharacter = () => {
 
       await revalidatePaths(
         [
-          `characters/${id}`,
+          `/characters/${id}`,
           ...(isCacheDataChanged || !!avatar ? ['/characters'] : []),
         ],
         tokenRes.token
