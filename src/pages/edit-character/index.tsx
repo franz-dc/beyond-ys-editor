@@ -117,6 +117,7 @@ const EditCharacter = () => {
       gameIds: true,
       cachedGames: true,
       updatedAt: true,
+      aliases: true,
     })
     .extend({
       id: z.string().nullable(),
@@ -141,6 +142,7 @@ const EditCharacter = () => {
           },
           { message: 'Avatar must not be bigger than 200x200 pixels.' }
         ),
+      aliases: z.object({ value: z.string().min(1) }).array(),
       mainImage: imageSchema
         // check if less than 1000x1000
         .refine(
@@ -200,6 +202,7 @@ const EditCharacter = () => {
       avatar: null,
       mainImage: null,
       extraImages: [],
+      aliases: [],
     },
     resolver: zodResolver(schema),
   });
@@ -245,6 +248,16 @@ const EditCharacter = () => {
   });
 
   const {
+    fields: aliases,
+    append: appendAlias,
+    remove: removeAlias,
+    swap: swapAlias,
+  } = useFieldArray({
+    control,
+    name: 'aliases',
+  });
+
+  const {
     fields: extraImages,
     append: appendExtraImage,
     remove: removeExtraImage,
@@ -269,6 +282,7 @@ const EditCharacter = () => {
     avatar,
     mainImage,
     extraImages,
+    aliases,
     ...rest
   }: Schema) => {
     if (!id) return;
@@ -376,6 +390,7 @@ const EditCharacter = () => {
         hasMainImage: newHasMainImage,
         updatedAt: serverTimestamp(),
         extraImages: formattedExtraImages,
+        aliases: aliases.map(({ value }) => value),
         ...rest,
       });
 
@@ -488,8 +503,14 @@ const EditCharacter = () => {
       const character = characterSnap.data();
 
       if (character) {
-        const { extraImages, gameIds, cachedGames, updatedAt, ...rest } =
-          character;
+        const {
+          extraImages,
+          gameIds,
+          cachedGames,
+          aliases,
+          updatedAt,
+          ...rest
+        } = character;
 
         setCurrentCharacterData(character);
         reset({
@@ -504,6 +525,7 @@ const EditCharacter = () => {
             isNew: false,
             file: null,
           })),
+          aliases: aliases ? aliases.map((value) => ({ value })) : [],
         });
         setLastCharacterId(id);
       } else {
@@ -523,6 +545,7 @@ const EditCharacter = () => {
           cachedGames: {},
           hasMainImage: false,
           hasAvatar: false,
+          aliases: [],
         });
         reset({
           id: '',
@@ -540,6 +563,7 @@ const EditCharacter = () => {
           avatar: null,
           mainImage: null,
           extraImages: [],
+          aliases: [],
         });
         setLastCharacterId(id);
       }
@@ -653,6 +677,57 @@ const EditCharacter = () => {
                 fullWidth
                 margin='normal'
               />
+            </Paper>
+            <Paper sx={{ px: 3, py: 2, mb: 2 }}>
+              <Typography variant='h2'>Aliases</Typography>
+              {aliases.map((role, idx) => (
+                <Stack direction='row' spacing={2} key={role.id}>
+                  <TextFieldElement
+                    name={`aliases.${idx}.value`}
+                    label={`Alias ${idx + 1}`}
+                    fullWidth
+                    margin='normal'
+                    required
+                  />
+                  <Button
+                    variant='outlined'
+                    onClick={() => removeAlias(idx)}
+                    sx={{ mt: '16px !important', height: 56 }}
+                  >
+                    Remove
+                  </Button>
+                  <Button
+                    variant='outlined'
+                    onClick={() => {
+                      if (idx === 0) return;
+                      swapAlias(idx, idx - 1);
+                    }}
+                    disabled={idx === 0}
+                    sx={{ mt: '16px !important', height: 56 }}
+                  >
+                    Up
+                  </Button>
+                  <Button
+                    variant='outlined'
+                    onClick={() => {
+                      if (idx === aliases.length - 1) return;
+                      swapAlias(idx, idx + 1);
+                    }}
+                    disabled={idx === aliases.length - 1}
+                    sx={{ mt: '16px !important', height: 56 }}
+                  >
+                    Down
+                  </Button>
+                </Stack>
+              ))}
+              <Button
+                variant='outlined'
+                onClick={() => appendAlias({ value: '' })}
+                fullWidth
+                sx={{ mt: 1 }}
+              >
+                Add Alias
+              </Button>
             </Paper>
             <Paper sx={{ px: 3, py: 2, mb: 2 }}>
               <Typography variant='h2'>Game Involvements</Typography>

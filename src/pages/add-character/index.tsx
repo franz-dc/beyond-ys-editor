@@ -100,6 +100,8 @@ const AddCharacter = () => {
       hasMainImage: true,
       hasAvatar: true,
       updatedAt: true,
+      // doing this to fulfill useFieldArray's requirement
+      aliases: true,
     })
     .extend({
       id: z
@@ -110,6 +112,7 @@ const AddCharacter = () => {
         }),
       name: z.string().min(1),
       customSlug: z.boolean(),
+      aliases: z.object({ value: z.string().min(1) }).array(),
       avatar: imageSchema
         // check if less than 200x200
         .refine(
@@ -187,6 +190,7 @@ const AddCharacter = () => {
       avatar: null,
       mainImage: null,
       extraImages: [],
+      aliases: [],
     },
     resolver: zodResolver(schema),
   });
@@ -214,6 +218,16 @@ const AddCharacter = () => {
   });
 
   const {
+    fields: aliases,
+    append: appendAlias,
+    remove: removeAlias,
+    swap: swapAlias,
+  } = useFieldArray({
+    control,
+    name: 'aliases',
+  });
+
+  const {
     fields: extraImages,
     append: appendExtraImage,
     remove: removeExtraImage,
@@ -234,6 +248,7 @@ const AddCharacter = () => {
     avatar,
     mainImage,
     extraImages,
+    aliases,
     ...rest
   }: Schema) => {
     // check if id is already taken (using the characterNames cache)
@@ -320,6 +335,7 @@ const AddCharacter = () => {
         cachedGames: {},
         hasMainImage,
         hasAvatar,
+        aliases: aliases.map(({ value }) => value),
         updatedAt: serverTimestamp(),
         ...rest,
       });
@@ -491,6 +507,57 @@ const AddCharacter = () => {
             fullWidth
             margin='normal'
           />
+        </Paper>
+        <Paper sx={{ px: 3, py: 2, mb: 2 }}>
+          <Typography variant='h2'>Aliases</Typography>
+          {aliases.map((role, idx) => (
+            <Stack direction='row' spacing={2} key={role.id}>
+              <TextFieldElement
+                name={`aliases.${idx}.value`}
+                label={`Alias ${idx + 1}`}
+                fullWidth
+                margin='normal'
+                required
+              />
+              <Button
+                variant='outlined'
+                onClick={() => removeAlias(idx)}
+                sx={{ mt: '16px !important', height: 56 }}
+              >
+                Remove
+              </Button>
+              <Button
+                variant='outlined'
+                onClick={() => {
+                  if (idx === 0) return;
+                  swapAlias(idx, idx - 1);
+                }}
+                disabled={idx === 0}
+                sx={{ mt: '16px !important', height: 56 }}
+              >
+                Up
+              </Button>
+              <Button
+                variant='outlined'
+                onClick={() => {
+                  if (idx === aliases.length - 1) return;
+                  swapAlias(idx, idx + 1);
+                }}
+                disabled={idx === aliases.length - 1}
+                sx={{ mt: '16px !important', height: 56 }}
+              >
+                Down
+              </Button>
+            </Stack>
+          ))}
+          <Button
+            variant='outlined'
+            onClick={() => appendAlias({ value: '' })}
+            fullWidth
+            sx={{ mt: 1 }}
+          >
+            Add Alias
+          </Button>
         </Paper>
         <Paper sx={{ px: 3, py: 2, mb: 2 }}>
           <Box sx={{ mb: 2 }}>
