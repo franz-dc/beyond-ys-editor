@@ -304,7 +304,7 @@ const AddCharacter = () => {
         extraImages.forEach((image, i) =>
           extraImagesWithStatus.push({
             ...image,
-            status: res[i].status,
+            status: res[i]!.status,
           })
         );
 
@@ -691,7 +691,7 @@ const AddCharacter = () => {
                   accept='image/webp'
                   {...register('avatar', {
                     onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                      if (e.target.files?.[0].type === 'image/webp') {
+                      if (e.target.files?.[0]?.type === 'image/webp') {
                         setValue('avatar', e.target.files[0]);
                       } else {
                         setValue('avatar', null);
@@ -803,7 +803,7 @@ const AddCharacter = () => {
                   accept='image/webp'
                   {...register('mainImage', {
                     onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                      if (e.target.files?.[0].type === 'image/webp') {
+                      if (e.target.files?.[0]?.type === 'image/webp') {
                         setValue('mainImage', e.target.files[0]);
                       } else {
                         setValue('mainImage', null);
@@ -922,7 +922,7 @@ const AddCharacter = () => {
                       // doing this because useFieldArray's fields does
                       // not always have the latest value
                       const prevExtraImage = getValues(`extraImages.${idx}`);
-                      if (e.target.files?.[0].type === 'image/webp') {
+                      if (e.target.files?.[0]?.type === 'image/webp') {
                         updateExtraImage(idx, {
                           ...prevExtraImage,
                           file: e.target.files[0],
@@ -947,7 +947,9 @@ const AddCharacter = () => {
                     color={errors.mainImage ? 'error' : 'primary'}
                     component='span'
                   >
-                    {!!extraImages[idx].file ? 'Replace Image' : 'Upload Image'}
+                    {!!extraImages[idx]?.file
+                      ? 'Replace Image'
+                      : 'Upload Image'}
                   </Button>
                 </label>
               </Box>

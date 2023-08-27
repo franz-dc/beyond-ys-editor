@@ -760,7 +760,7 @@ const EditStaff = () => {
                       accept='image/webp'
                       {...register('avatar', {
                         onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0].type === 'image/webp') {
+                          if (e.target.files?.[0]?.type === 'image/webp') {
                             setValue('avatar', e.target.files[0]);
                           } else {
                             setValue('avatar', null);

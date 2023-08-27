@@ -31,6 +31,12 @@ const setUserRole = async () => {
   const uid = process.argv[2];
   const role = process.argv[3];
 
+  if (!uid || !role) {
+    console.error('Missing arguments.');
+    console.error('Usage: yarn set-user-role <uid> <role>');
+    process.exit(1);
+  }
+
   await auth.setCustomUserClaims(uid, { role });
 
   console.log(`User ${uid} has been set to role ${role}.`);

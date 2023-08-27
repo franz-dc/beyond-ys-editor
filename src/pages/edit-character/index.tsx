@@ -341,7 +341,7 @@ const EditCharacter = () => {
         newExtraImages.forEach((image, i) =>
           newExtraImagesWithStatus.push({
             ...image,
-            status: res[i].status,
+            status: res[i]!.status,
           })
         );
 
@@ -939,7 +939,7 @@ const EditCharacter = () => {
                       accept='image/webp'
                       {...register('avatar', {
                         onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0].type === 'image/webp') {
+                          if (e.target.files?.[0]?.type === 'image/webp') {
                             setValue('avatar', e.target.files[0]);
                           } else {
                             setValue('avatar', null);
@@ -1085,7 +1085,7 @@ const EditCharacter = () => {
                       accept='image/webp'
                       {...register('mainImage', {
                         onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0].type === 'image/webp') {
+                          if (e.target.files?.[0]?.type === 'image/webp') {
                             setValue('mainImage', e.target.files[0]);
                           } else {
                             setValue('mainImage', null);
@@ -1227,7 +1227,7 @@ const EditCharacter = () => {
                             const prevExtraImage = getValues(
                               `extraImages.${idx}`
                             );
-                            if (e.target.files?.[0].type === 'image/webp') {
+                            if (e.target.files?.[0]?.type === 'image/webp') {
                               updateExtraImage(idx, {
                                 ...prevExtraImage,
                                 file: e.target.files[0],
@@ -1252,7 +1252,7 @@ const EditCharacter = () => {
                           color={errors.mainImage ? 'error' : 'primary'}
                           component='span'
                         >
-                          {!!extraImages[idx].file
+                          {!!extraImages[idx]?.file
                             ? 'Replace Image'
                             : 'Upload Image'}
                         </Button>

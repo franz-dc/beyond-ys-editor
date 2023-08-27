@@ -450,7 +450,7 @@ const EditGame = () => {
         // due to 'in' query limit
         const addedSoundtrackIdsChunks = addedSoundtrackIds.reduce(
           (acc, curr) => {
-            const last = acc[acc.length - 1];
+            const last = acc[acc.length - 1]!;
             if (last.length < 30) {
               last.push(curr);
             } else {
@@ -1102,7 +1102,7 @@ const EditGame = () => {
                       accept='image/webp'
                       {...register('coverImage', {
                         onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0].type === 'image/webp') {
+                          if (e.target.files?.[0]?.type === 'image/webp') {
                             setValue('coverImage', e.target.files[0]);
                           } else {
                             setValue('coverImage', null);
@@ -1231,7 +1231,7 @@ const EditGame = () => {
                       accept='image/webp'
                       {...register('bannerImage', {
                         onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0].type === 'image/webp') {
+                          if (e.target.files?.[0]?.type === 'image/webp') {
                             setValue('bannerImage', e.target.files[0]);
                           } else {
                             setValue('bannerImage', null);
@@ -1326,7 +1326,7 @@ const EditGame = () => {
                         const albumName =
                           albumId === ''
                             ? 'No album'
-                            : foundAlbum.name || 'Unknown album';
+                            : foundAlbum?.name || 'Unknown album';
 
                         return {
                           id,

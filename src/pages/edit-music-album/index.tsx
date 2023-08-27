@@ -359,7 +359,7 @@ const EditMusicAlbum = () => {
       if (removedMusicIds?.length) {
         removedMusicIds.forEach((id) => {
           changedMusicCacheItems[id] = {
-            title: musicCache[id]?.title,
+            title: musicCache[id]?.title ?? '',
             albumId: '',
           };
 
@@ -377,7 +377,7 @@ const EditMusicAlbum = () => {
         // due to 'in' query limit
         const removedMusicIdsChunks = removedMusicIds.reduce<string[][]>(
           (acc, curr) => {
-            const last = acc[acc.length - 1];
+            const last = acc[acc.length - 1]!;
             if (last.length < 30) {
               last.push(curr);
             } else {
@@ -446,7 +446,7 @@ const EditMusicAlbum = () => {
       if (addedMusicIds.length) {
         addedMusicIds.forEach((id) => {
           changedMusicCacheItems[id] = {
-            title: musicCache[id]?.title,
+            title: musicCache[id]?.title ?? '',
             albumId,
           };
 
@@ -461,7 +461,7 @@ const EditMusicAlbum = () => {
         // due to 'in' query limit
         const addedMusicIdsChunks = addedMusicIds.reduce<string[][]>(
           (acc, curr) => {
-            const last = acc[acc.length - 1];
+            const last = acc[acc.length - 1]!;
             if (last.length < 30) {
               last.push(curr);
             } else {
@@ -723,7 +723,7 @@ const EditMusicAlbum = () => {
                       accept='image/webp'
                       {...register('albumArt', {
                         onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files?.[0].type === 'image/webp') {
+                          if (e.target.files?.[0]?.type === 'image/webp') {
                             setValue('albumArt', e.target.files[0]);
                           } else {
                             setValue('albumArt', null);
@@ -813,7 +813,7 @@ const EditMusicAlbum = () => {
                         const albumName =
                           albumId === ''
                             ? 'No album'
-                            : foundAlbum.name || 'Unknown album';
+                            : foundAlbum?.name || 'Unknown album';
 
                         return {
                           id,

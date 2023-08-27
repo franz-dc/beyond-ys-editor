@@ -254,7 +254,7 @@ const AddMusicAlbum = () => {
         // due to 'in' query limit
         const formattedMusicIdsChunks = formattedMusicIds.reduce(
           (acc, curr) => {
-            const last = acc[acc.length - 1];
+            const last = acc[acc.length - 1]!;
             if (last.length < 30) {
               last.push(curr);
             } else {
@@ -525,7 +525,7 @@ const AddMusicAlbum = () => {
                   accept='image/webp'
                   {...register('albumArt', {
                     onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                      if (e.target.files?.[0].type === 'image/webp') {
+                      if (e.target.files?.[0]?.type === 'image/webp') {
                         setValue('albumArt', e.target.files[0]);
                       } else {
                         setValue('albumArt', null);
@@ -613,7 +613,7 @@ const AddMusicAlbum = () => {
                     const albumName =
                       albumId === ''
                         ? 'No album'
-                        : foundAlbum.name || 'Unknown album';
+                        : foundAlbum?.name || 'Unknown album';
 
                     return {
                       id,

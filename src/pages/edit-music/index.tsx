@@ -382,8 +382,8 @@ const EditMusic = () => {
         otherArtists.length !== originalOtherArtists.length ||
         !otherArtists.every(
           ({ staffId, role }, index) =>
-            staffId === originalOtherArtists[index].staffId &&
-            role === originalOtherArtists[index].role
+            staffId === originalOtherArtists[index]?.staffId &&
+            role === originalOtherArtists[index]?.role
         );
 
       if (otherArtistsChanged) {
@@ -513,7 +513,7 @@ const EditMusic = () => {
                 const albumName =
                   albumId === ''
                     ? 'No album'
-                    : foundAlbum.name || 'Unknown album';
+                    : foundAlbum?.name || 'Unknown album';
 
                 return {
                   id,
