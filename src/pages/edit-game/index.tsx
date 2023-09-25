@@ -33,6 +33,7 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { useSnackbar } from 'notistack';
 import {
   AutocompleteElement,
+  CheckboxElement,
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
@@ -232,6 +233,7 @@ const EditGame = () => {
       coverImage: null,
       bannerImage: null,
       aliases: [],
+      noLocalizations: false,
     },
     resolver: zodResolver(schema),
   });
@@ -320,6 +322,7 @@ const EditGame = () => {
     coverImage,
     bannerImage,
     aliases,
+    noLocalizations,
   }: Schema) => {
     if (!id) return;
     if (!auth.currentUser) {
@@ -385,6 +388,7 @@ const EditGame = () => {
         hasCoverImage: newHasCoverImage,
         hasBannerImage: newHasBannerImage,
         aliases: aliases.map(({ value }) => value),
+        noLocalizations,
       };
 
       // update these if cache fields have changed
@@ -679,6 +683,7 @@ const EditGame = () => {
           cachedSoundtracks: {},
           cachedCharacters: {},
           aliases: [],
+          noLocalizations: false,
         });
         reset({
           id,
@@ -699,6 +704,7 @@ const EditGame = () => {
           coverImage: null,
           bannerImage: null,
           aliases: [],
+          noLocalizations: false,
         });
         setLastGameId(id);
       }
@@ -770,6 +776,10 @@ const EditGame = () => {
                 label='Subcategory'
                 fullWidth
                 margin='normal'
+              />
+              <CheckboxElement
+                name='noLocalizations'
+                label='Game has no localizations'
               />
             </Paper>
             <Paper sx={{ px: 3, py: 2, mb: 2 }}>

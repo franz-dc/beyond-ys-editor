@@ -28,6 +28,7 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { useSnackbar } from 'notistack';
 import {
   AutocompleteElement,
+  CheckboxElement,
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
@@ -250,6 +251,7 @@ const AddGame = () => {
       coverImage: null,
       bannerImage: null,
       aliases: [],
+      noLocalizations: false,
     },
     resolver: zodResolver(schema),
   });
@@ -323,6 +325,7 @@ const AddGame = () => {
     coverImage,
     bannerImage,
     aliases,
+    noLocalizations,
   }: Schema) => {
     // check if id is already taken (using the games cache)
     // failsafe in case the user somehow bypasses the form validation
@@ -442,6 +445,7 @@ const AddGame = () => {
         hasCoverImage,
         hasBannerImage,
         aliases: aliases.map(({ value }) => value),
+        noLocalizations,
       };
 
       // update the game doc
@@ -583,6 +587,10 @@ const AddGame = () => {
             label='Subcategory'
             fullWidth
             margin='normal'
+          />
+          <CheckboxElement
+            name='noLocalizations'
+            label='Game has no localizations'
           />
         </Paper>
         <Paper sx={{ px: 3, py: 2, mb: 2 }}>
