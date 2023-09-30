@@ -662,6 +662,7 @@ const EditGame = () => {
           coverImage: null,
           bannerImage: null,
           aliases: aliases ? aliases.map((value) => ({ value })) : [],
+          noLocalizations: !!game.noLocalizations,
         });
         setLastGameId(id);
       } else {
