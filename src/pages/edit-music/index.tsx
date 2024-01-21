@@ -310,6 +310,13 @@ const EditMusic = () => {
         originalStaffIds.includes(id)
       );
 
+      retainedStaffIds.forEach((staffId) => {
+        batch.update(doc(staffInfosCollection, staffId), {
+          [`cachedMusic.${id}`]: newData,
+          updatedAt: serverTimestamp(),
+        });
+      });
+
       // 1. removed staff
       const removedStaffIds = originalStaffIds.filter(
         (id) => !newStaffIds.includes(id)
