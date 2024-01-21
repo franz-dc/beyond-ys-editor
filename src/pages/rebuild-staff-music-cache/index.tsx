@@ -9,10 +9,14 @@ import { Paper } from '@mui/material';
 import {
   deleteField,
   doc,
+  documentId,
   getDoc,
+  getDocs,
   onSnapshot,
+  query,
   serverTimestamp,
   updateDoc,
+  where,
 } from 'firebase/firestore';
 import { useSnackbar } from 'notistack';
 import {
@@ -23,26 +27,17 @@ import {
 import { z } from 'zod';
 
 import { GenericHeader, MainLayout } from '~/components';
-import { auth, cacheCollection, staffInfosCollection } from '~/configs';
-import { MusicCacheSchema, StaffInfoCacheSchema } from '~/schemas';
+import {
+  auth,
+  cacheCollection,
+  musicCollection,
+  staffInfosCollection,
+} from '~/configs';
+import { StaffInfoCacheSchema } from '~/schemas';
 import { revalidatePaths } from '~/utils';
 
 const RebuildStaffMusicCache = () => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const [musicCache, setMusicCache] = useState<
-    Record<string, MusicCacheSchema>
-  >({});
-  const [isLoadingMusicCache, setIsLoadingMusicCache] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(doc(cacheCollection, 'music'), (docSnap) => {
-      setMusicCache(docSnap.data() || {});
-      setIsLoadingMusicCache(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const [staffInfoCache, setStaffInfoCache] = useState<
     Record<string, StaffInfoCacheSchema>
@@ -104,13 +99,34 @@ const RebuildStaffMusicCache = () => {
 
       const musicIds = staffInfo.data().musicIds;
 
-      const newCachedMusic: {
-        [key: string]: MusicCacheSchema;
-      } = musicIds.reduce(
-        (acc: Record<string, MusicCacheSchema>, musicId: string) => {
-          if (musicId in musicCache) {
-            acc[`cachedMusic.${musicId}`] = musicCache[musicId]!;
+      // split the musicIds into chunks of 30
+      // due to 'in' query limit
+      const musicIdsChunks = musicIds.reduce<string[][]>(
+        (acc, curr) => {
+          const last = acc[acc.length - 1]!;
+          if (last.length < 30) {
+            last.push(curr);
+          } else {
+            acc.push([curr]);
           }
+          return acc;
+        },
+        [[]]
+      );
+
+      const musicQuerySnaps = await Promise.all(
+        musicIdsChunks.map((chunk) =>
+          getDocs(query(musicCollection, where(documentId(), 'in', chunk)))
+        )
+      );
+
+      const newCachedMusic = musicQuerySnaps.reduce(
+        (acc: Record<string, unknown>, snap) => {
+          snap.forEach((docSnap) => {
+            const musicId = docSnap.id;
+            acc[`cachedMusic.${musicId}`] = docSnap.data();
+          });
+
           return acc;
         },
         {}
@@ -151,7 +167,7 @@ const RebuildStaffMusicCache = () => {
                 label,
               })
             )}
-            loading={isLoadingStaffInfoCache || isLoadingMusicCache}
+            loading={isLoadingStaffInfoCache}
             autocompleteProps={{
               fullWidth: true,
             }}
